@@ -30,12 +30,11 @@ public class MainActivity extends AppCompatActivity {
                 int data = reader.read();
 
                 while (data != -1) {
-                    data = reader.read();
                     char current = (char) data;
-
                     result += current;
-                }
 
+                    data = reader.read();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
