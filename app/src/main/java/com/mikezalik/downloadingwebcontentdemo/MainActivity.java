@@ -24,6 +24,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         DownloadTask task = new DownloadTask();
-        task.execute("http://www.github.com/mikezalik");
+
+        try {
+            task.execute("http://www.github.com/mikezalik");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
