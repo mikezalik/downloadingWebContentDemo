@@ -6,14 +6,39 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 public class MainActivity extends AppCompatActivity {
 
     public class DownloadTask extends AsyncTask<String, Void, String> {
 
         @Override
-        protected String doInBackground(String... strings) {
-            Log.i("URL", strings[0]);
+        protected String doInBackground(String... urls) {
 
+            String result = "";
+            URL url;
+            HttpURLConnection urlConnection = null;
+
+            try {
+                url = new URL(urls[0]);
+                urlConnection = (HttpURLConnection) url.openConnection();
+                InputStream in = urlConnection.getInputStream();
+                InputStreamReader reader = new InputStreamReader(in);
+                int data = reader.read();
+
+                while (data != -1) {
+                    data = reader.read();
+                    char current = (char) data;
+
+                    result += current;
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             return "Done";
         }
     }
@@ -24,11 +49,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         DownloadTask task = new DownloadTask();
-
+        String result = null;
         try {
-            task.execute("http://www.github.com/mikezalik");
+            result = task.execute("http://www.github.com/mikezalik").get();
         } catch (Exception e) {
             e.printStackTrace();
         }
+        Log.i("Result", result);
     }
 }
